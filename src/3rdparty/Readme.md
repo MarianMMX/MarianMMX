@@ -2,7 +2,7 @@ mariadb-connector-c-2.2.1-src.tar.gz
 wget --no-check-certificate https://goo.gl/eoAQwf  
   
 icu4c-56_1-src.zip  
-wget --no-check-certificate https://goo.gl/mLXZ6x  
+wget --no-check-certificate https://github.com/MarianMMX/MarianMMX/blob/master/src/archives/icu4c-56_1-src.zip?raw=true  
   
 openssl  
 wget --no-check-certificate https://goo.gl/2RvV8m  
