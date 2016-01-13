@@ -15,9 +15,10 @@ pkg install gmake
 sh runConfigureICU FreeBSD --prefix=/usr/home/user/out --enable-static --disable-shared  
 gmake  
 gmake install  
-
-webkit
-pkg install perl
-pkg install python
-pkg install bison
-pkg install ruby
+  
+webkit  
+pkg install perl  
+pkg install python  
+pkg install bison  
+pkg install ruby  
+  
