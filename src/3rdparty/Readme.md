@@ -22,3 +22,4 @@ pkg install python
 pkg install bison  
 pkg install ruby  
   
+pkg install git  
