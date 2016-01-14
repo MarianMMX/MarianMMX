@@ -1,6 +1,12 @@
 #!/bin/sh
 # 2016-01-14 14:54 MarianMMX
 
+NUME_SYSTEM="$(uname -s)_$(uname -r)_$(uname -m)_gcc$(gcc -dumpversion)"
+export NUME_SYSTEM
+
+TRD_SRC_DIR=$(dirname $(readlink -f $0))/../3rdparty
+export TRD_SRC_DIR
+
 BUILD_DIR=$(dirname $(readlink -f $0))/../../../build
 export BUILD_DIR
 
