@@ -11,5 +11,14 @@
 OPENSSL_LIBS='-lssl -lcrypto'
 export OPENSSL_LIBS
 
+O_DIR=$(pwd)
+cd "$BUILD_DIR"
+if [ ! -d "qtbase" ]; then
+	mkdir qtbase
+fi
+cd qtbase
+
 $BUILD_SCRIPTS_DIR/config_qt.sh
 make
+
+cd $O_DIR
