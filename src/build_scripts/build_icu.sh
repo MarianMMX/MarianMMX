@@ -12,8 +12,12 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+mkdir tmp_icu && cd tmp_icu
 chmod +x "$TRD_ICU_SRC_DIR"/source/runConfigureICU
 chmod +x "$TRD_ICU_SRC_DIR"/source/configure
 sh "$TRD_ICU_SRC_DIR"/source/runConfigureICU "$1" --prefix=$T_DIR --enable-static --disable-shared
 make
 make install
+
+cd ..
+rm -rf tmp_icu
