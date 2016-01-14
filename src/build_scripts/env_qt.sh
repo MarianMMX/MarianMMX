@@ -14,6 +14,7 @@ BUILD_DIR=$(dirname $(readlink -f $0))/../../../build
 export BUILD_DIR
 
 QT_SRC_BASE_DIR=$(dirname $(readlink -f $0))/../3rdparty/qt5
+export QT_SRC_BASE_DIR
 QT_EXTRA_DIR="$(pwd)"/../QtExtra
 
 TRD_ICU_SRC_DIR=$(dirname $(readlink -f $0))/../3rdparty/icu
@@ -30,3 +31,6 @@ CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:$BUILD_DIR/icu/include/:$BUILD_DIR/openss
 export CPLUS_INCLUDE_PATH
 LIBRARY_PATH=$LIBRARY_PATH:$BUILD_DIR/icu/lib/:$BUILD_DIR/openssl/lib/
 export LIBRARY_PATH
+#echo $LIBRARY_PATH
+#exit
+
