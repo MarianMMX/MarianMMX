@@ -4,6 +4,6 @@
 . $(dirname $0)/env_qt.sh
 T_DIR="$(pwd)"/icu
 
-sh runConfigureICU FreeBSD --prefix=$T_DIR --enable-static --disable-shared
+sh runConfigureICU --prefix=$T_DIR --enable-static --disable-shared
 make
 make install
