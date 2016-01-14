@@ -17,8 +17,8 @@ else
 fi
 echo "DIRECTORUL DESTINATIE: $T_DIR"
 
-if [ -d "$T_DIR" ]; then
-  echo "DIRECTORUL DESTINATIE: $T_DIR EXISTA, EXIT"
+if [ -d "$T_DIR" ] || [ -d "$TEMP_DIR" ]; then
+  echo "DIRECTORUL DESTINATIE: $T_DIR SI/SAU TEMP: $TEMP_DIR EXISTA, EXIT"
   exit 1
 fi
 
@@ -27,13 +27,18 @@ fi
 #exit
 
 if [ -z "$1" ]; then
+  echo "No param"
   # echo "Eroare platforma $0 Linux/gcc \$(pwd)/openssl"
   # exit 1
 fi
 
-mkdir $TEMP_DIR && cd $TEMP_DIR
-chmod +x "$TRD_OPENSSL_SRC_DIR"/config
-sh "$TRD_OPENSSL_SRC_DIR"/config --prefix=$T_DIR
+#mkdir $TEMP_DIR && cd $TEMP_DIR
+cp -a "$TRD_OPENSSL_SRC_DIR"/ ./$TEMP_DIR
+cd $TEMP_DIR
+chmod +x ./config
+./config --prefix=$T_DIR
+#chmod +x "$TRD_OPENSSL_SRC_DIR"/config
+#sh "$TRD_OPENSSL_SRC_DIR"/config --prefix=$T_DIR
 make
 make install
 
