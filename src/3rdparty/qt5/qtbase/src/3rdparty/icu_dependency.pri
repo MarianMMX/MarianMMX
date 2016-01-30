@@ -9,5 +9,5 @@ win32 {
         LIBS_PRIVATE += -licuin -licuuc -licudt
     }
 } else {
-    LIBS_PRIVATE += -licui18n -licuuc -licudata
+    LIBS_PRIVATE += -licui18n -licuuc -licudata -ldl
 }
