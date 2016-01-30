@@ -228,10 +228,9 @@ public:
     virtual bool shouldHaveSpinButton(HTMLInputElement*) const;
 
     // Functions for <select> elements.
-    virtual bool delegatesMenuListRendering() const;
+    virtual bool delegatesMenuListRendering() const { return false; }
     virtual bool popsMenuByArrowKeys() const { return false; }
     virtual bool popsMenuBySpaceOrReturn() const { return false; }
-    static void setDelegatesMenuListRendering(bool on);
 
     virtual String fileListDefaultLabel(bool multipleFilesAllowed) const;
     virtual String fileListNameForWidth(const FileList*, const Font&, int width, bool multipleFilesAllowed) const;

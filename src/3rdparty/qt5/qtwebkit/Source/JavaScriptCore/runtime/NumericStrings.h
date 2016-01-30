@@ -37,7 +37,7 @@ namespace JSC {
         ALWAYS_INLINE String add(double d)
         {
             CacheEntry<double>& entry = lookup(d);
-            if (!entry.value.isNull() && d == entry.key)
+            if (d == entry.key && !entry.value.isNull())
                 return entry.value;
             entry.key = d;
             entry.value = String::numberToStringECMAScript(d);
@@ -49,7 +49,7 @@ namespace JSC {
             if (static_cast<unsigned>(i) < cacheSize)
                 return lookupSmallString(static_cast<unsigned>(i));
             CacheEntry<int>& entry = lookup(i);
-            if (!entry.value.isNull() && i == entry.key)
+            if (i == entry.key && !entry.value.isNull())
                 return entry.value;
             entry.key = i;
             entry.value = String::number(i);
@@ -61,7 +61,7 @@ namespace JSC {
             if (i < cacheSize)
                 return lookupSmallString(static_cast<unsigned>(i));
             CacheEntry<unsigned>& entry = lookup(i);
-            if (!entry.value.isNull() && i == entry.key)
+            if (i == entry.key && !entry.value.isNull())
                 return entry.value;
             entry.key = i;
             entry.value = String::number(i);

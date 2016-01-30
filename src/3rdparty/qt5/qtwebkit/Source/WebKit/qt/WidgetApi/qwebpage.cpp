@@ -281,6 +281,11 @@ QWebPageAdapter *QWebPagePrivate::createWindow(bool dialog)
     return newPage->d;
 }
 
+void QWebPagePrivate::javaScriptError(const QString& message, int lineNumber, const QString& sourceID, const QString& stack)
+{
+    q->javaScriptError(message, lineNumber, sourceID, stack);
+}
+
 void QWebPagePrivate::javaScriptConsoleMessage(const QString &message, int lineNumber, const QString &sourceID)
 {
     q->javaScriptConsoleMessage(message, lineNumber, sourceID);
@@ -912,10 +917,6 @@ void QWebPagePrivate::dropEvent(T *ev)
 
 void QWebPagePrivate::leaveEvent(QEvent*)
 {
-    // If a mouse button is pressed we will continue to receive mouse events after leaving the window.
-    if (mousePressed)
-        return;
-
     // Fake a mouse move event just outside of the widget, since all
     // the interesting mouse-out behavior like invalidating scrollbars
     // is handled by the WebKit event handler's mouseMoved function.
@@ -949,14 +950,13 @@ QPalette QWebPage::palette() const
 
 void QWebPagePrivate::shortcutOverrideEvent(QKeyEvent* event)
 {
-    if (handleShortcutOverrideEvent(event)) {
-        if (event->isAccepted())
-            return;
+    if (handleShortcutOverrideEvent(event))
+        return;
 #ifndef QT_NO_SHORTCUT
-        else if (editorActionForKeyEvent(event) != QWebPage::NoWebAction)
-            event->accept();
+    if (editorActionForKeyEvent(event) != QWebPage::NoWebAction)
+        event->accept();
 #endif
-    }
+
 }
 
 bool QWebPagePrivate::gestureEvent(QGestureEvent* event)
@@ -1003,7 +1003,7 @@ bool QWebPagePrivate::gestureEvent(QGestureEvent* event)
 
   \a property specifies which property is queried.
 
-  \sa QWidget::inputMethodEvent(), QInputMethodEvent
+  \sa QWidget::inputMethodEvent(), QInputMethodEvent, QInputContext
 */
 QVariant QWebPage::inputMethodQuery(Qt::InputMethodQuery property) const
 {
@@ -1214,48 +1214,6 @@ QWebInspector* QWebPagePrivate::getOrCreateInspector()
     \value WebModalDialog The window acts as modal dialog.
 */
 
-/*!
-    \enum QWebPage::PermissionPolicy
-
-    This enum describes the permission policies that the user may set for data or device access.
-
-    \value PermissionUnknown It is unknown whether the user grants or denies permission.
-    \value PermissionGrantedByUser The user has granted permission.
-    \value PermissionDeniedByUser The user has denied permission.
-
-    \sa featurePermissionRequested(), featurePermissionRequestCanceled(), setFeaturePermission(), Feature
-*/
-
-/*!
-    \enum QWebPage::Feature
-
-    This enum describes the platform feature access categories that the user may be asked to grant or deny access to.
-
-    \value Notifications Access to notifications
-    \value Geolocation Access to location hardware or service
-
-    \sa featurePermissionRequested(), featurePermissionRequestCanceled(), setFeaturePermission(), PermissionPolicy
-
-*/
-
-/*!
-    \fn void QWebPage::featurePermissionRequested(QWebFrame* frame, QWebPage::Feature feature);
-
-    This is signal is emitted when the given \a frame requests to make use of
-    the resource or device identified by \a feature.
-
-    \sa featurePermissionRequestCanceled(), setFeaturePermission()
-*/
-
-/*!
-    \fn void QWebPage::featurePermissionRequestCanceled(QWebFrame* frame, QWebPage::Feature feature);
-
-    This is signal is emitted when the given \a frame cancels a previously issued
-    request to make use of \a feature.
-
-    \sa featurePermissionRequested(), setFeaturePermission()
-
-*/
 
 /*!
     \class QWebPage::ViewportAttributes
@@ -1639,6 +1597,14 @@ bool QWebPage::javaScriptPrompt(QWebFrame *frame, const QString& msg, const QStr
     return ok;
 }
 
+void QWebPage::javaScriptError(const QString &message, int lineNumber, const QString &sourceID, const QString &stack)
+{
+    Q_UNUSED(message);
+    Q_UNUSED(lineNumber);
+    Q_UNUSED(sourceID);
+    Q_UNUSED(stack);
+}
+
 /*!
     \fn bool QWebPage::shouldInterruptJavaScript()
     \since 4.6
@@ -1657,13 +1623,6 @@ bool QWebPage::shouldInterruptJavaScript()
 #endif
 }
 
-/*!
-    \fn void QWebPage::setFeaturePermission(QWebFrame* frame, Feature feature, PermissionPolicy policy)
-
-    Sets the permission for the given \a frame to use \a feature to \a policy.
-
-    \sa featurePermissionRequested(), featurePermissionRequestCanceled()
-*/
 void QWebPage::setFeaturePermission(QWebFrame* frame, Feature feature, PermissionPolicy policy)
 {
 #if !ENABLE(NOTIFICATIONS) && !ENABLE(LEGACY_NOTIFICATIONS) && !ENABLE(GEOLOCATION)
@@ -2204,9 +2163,6 @@ bool QWebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &
             return true;
 
         case DelegateExternalLinks:
-            if (request.url().scheme().isEmpty() &&
-              QWebPageAdapter::treatSchemeAsLocal(frame->baseUrl().scheme()))
-                return true;
             if (QWebPageAdapter::treatSchemeAsLocal(request.url().scheme()))
                 return true;
             emit linkClicked(request.url());
@@ -2690,12 +2646,6 @@ bool QWebPage::event(QEvent *ev)
         d->dynamicPropertyChangeEvent(this, static_cast<QDynamicPropertyChangeEvent*>(ev));
         break;
 #endif
-    case QEvent::Show:
-        d->setPluginsVisible(true);
-        break;
-    case QEvent::Hide:
-        d->setPluginsVisible(false);
-        break;
     default:
         return QObject::event(ev);
     }
@@ -3404,7 +3354,9 @@ QWebPage::VisibilityState QWebPage::visibilityState() const
     \fn void QWebPage::scrollRequested(int dx, int dy, const QRect& rectToScroll)
 
     This signal is emitted whenever the content given by \a rectToScroll needs
-    to be scrolled \a dx and \a dy downwards.
+    to be scrolled \a dx and \a dy downwards and no view was set.
+
+    \sa view()
 */
 
 /*!

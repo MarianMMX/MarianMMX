@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Qt Company Ltd.
+ * Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -55,4 +55,7 @@ void QtPrintContext::spoolPage(int pageNumber, float width)
     m_printContext->spoolPage(*m_graphicsContext, pageNumber, width);
 }
 
-
+WebCore::GraphicsContext& QtPrintContext::graphicsContext() const
+{
+    return *m_graphicsContext;
+}

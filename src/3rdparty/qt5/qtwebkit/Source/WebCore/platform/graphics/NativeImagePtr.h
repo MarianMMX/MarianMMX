@@ -31,6 +31,8 @@
 #if USE(CG)
 typedef struct CGImage* CGImageRef;
 #elif PLATFORM(QT)
+#include "NativeImageQt.h"
+#include <qglobal.h>
 QT_BEGIN_NAMESPACE
 class QPixmap;
 QT_END_NAMESPACE

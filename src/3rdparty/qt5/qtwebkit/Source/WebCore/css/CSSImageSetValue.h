@@ -71,7 +71,6 @@ private:
     CSSImageSetValue();
     CSSImageSetValue(const CSSImageSetValue& cloneFrom);
 
-    void detachPendingImage();
     void fillImageSet();
     static inline bool compareByScaleFactor(ImageWithScale first, ImageWithScale second) { return first.scaleFactor < second.scaleFactor; }
 

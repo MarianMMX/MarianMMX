@@ -517,7 +517,7 @@ inline ResolveNode::ResolveNode(const JSTokenLocation& location, const Identifie
     }
 
     inline LogicalOpNode::LogicalOpNode(const JSTokenLocation& location, ExpressionNode* expr1, ExpressionNode* expr2, LogicalOperator oper)
-        : ExpressionNode(location, ResultType::forLogicalOp(expr1->resultDescriptor(), expr2->resultDescriptor()))
+        : ExpressionNode(location, ResultType::booleanType())
         , m_expr1(expr1)
         , m_expr2(expr2)
         , m_operator(oper)

@@ -93,10 +93,6 @@ void QtBuiltinBundle::didReceiveMessageToPage(WKBundlePageRef page, WKStringRef 
         handleMessageToNavigatorQtObject(page, messageBody);
     else if (WKStringIsEqualToUTF8CString(messageName, "SetNavigatorQtObjectEnabled"))
         handleSetNavigatorQtObjectEnabled(page, messageBody);
-#ifdef HAVE_WEBCHANNEL
-    else if (WKStringIsEqualToUTF8CString(messageName, "MessageToNavigatorQtWebChannelTransportObject"))
-        handleMessageToNavigatorQtWebChannelTransport(page, messageBody);
-#endif
 }
 
 void QtBuiltinBundle::handleMessageToNavigatorQtObject(WKBundlePageRef page, WKTypeRef messageBody)
@@ -122,19 +118,5 @@ void QtBuiltinBundle::handleSetNavigatorQtObjectEnabled(WKBundlePageRef page, WK
         return;
     bundlePage->setNavigatorQtObjectEnabled(enabled);
 }
-
-#ifdef HAVE_WEBCHANNEL
-void QtBuiltinBundle::handleMessageToNavigatorQtWebChannelTransport(WKBundlePageRef page, WKTypeRef messageBody)
-{
-    ASSERT(messageBody);
-    ASSERT(WKGetTypeID(messageBody) == WKStringGetTypeID());
-    WKStringRef contents = static_cast<WKStringRef>(messageBody);
-
-    QtBuiltinBundlePage* bundlePage = m_pages.get(page);
-    if (!bundlePage)
-        return;
-    bundlePage->didReceiveMessageToNavigatorQtWebChannelTransport(contents);
-}
-#endif
 
 } // namespace WebKit

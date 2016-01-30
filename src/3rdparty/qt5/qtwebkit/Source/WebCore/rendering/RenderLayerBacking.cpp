@@ -315,8 +315,7 @@ void RenderLayerBacking::createPrimaryGraphicsLayer()
         m_childContainmentLayer = createGraphicsLayer("TiledBacking Flattening Layer");
 
     if (m_isMainFrameRenderViewLayer) {
-        bool viewIsTransparent = compositor()->viewHasTransparentBackground(0);
-        m_graphicsLayer->setContentsOpaque(!viewIsTransparent);
+        m_graphicsLayer->setContentsOpaque(true);
         m_graphicsLayer->setAppliesPageScale();
     }
 
@@ -1926,32 +1925,35 @@ void RenderLayerBacking::setContentsNeedDisplayInRect(const IntRect& r)
 {
     ASSERT(!paintsIntoCompositedAncestor());
 
-    LayoutRect layerDirtyRect(r);
-    layerDirtyRect.move(m_subpixelAccumulation);
     if (m_graphicsLayer && m_graphicsLayer->drawsContent()) {
+        IntRect layerDirtyRect = r;
         layerDirtyRect.move(-m_graphicsLayer->offsetFromRenderer());
-        m_graphicsLayer->setNeedsDisplayInRect(enclosingIntRect(layerDirtyRect));
+        m_graphicsLayer->setNeedsDisplayInRect(layerDirtyRect);
     }
 
     if (m_foregroundLayer && m_foregroundLayer->drawsContent()) {
+        IntRect layerDirtyRect = r;
         layerDirtyRect.move(-m_foregroundLayer->offsetFromRenderer());
-        m_foregroundLayer->setNeedsDisplayInRect(enclosingIntRect(layerDirtyRect));
+        m_foregroundLayer->setNeedsDisplayInRect(layerDirtyRect);
     }
 
     // FIXME: need to split out repaints for the background.
     if (m_backgroundLayer && m_backgroundLayer->drawsContent()) {
+        IntRect layerDirtyRect = r;
         layerDirtyRect.move(-m_backgroundLayer->offsetFromRenderer());
-        m_backgroundLayer->setNeedsDisplayInRect(enclosingIntRect(layerDirtyRect));
+        m_backgroundLayer->setNeedsDisplayInRect(layerDirtyRect);
     }
 
     if (m_maskLayer && m_maskLayer->drawsContent()) {
+        IntRect layerDirtyRect = r;
         layerDirtyRect.move(-m_maskLayer->offsetFromRenderer());
-        m_maskLayer->setNeedsDisplayInRect(enclosingIntRect(layerDirtyRect));
+        m_maskLayer->setNeedsDisplayInRect(layerDirtyRect);
     }
 
     if (m_scrollingContentsLayer && m_scrollingContentsLayer->drawsContent()) {
+        IntRect layerDirtyRect = r;
         layerDirtyRect.move(-m_scrollingContentsLayer->offsetFromRenderer());
-        m_scrollingContentsLayer->setNeedsDisplayInRect(enclosingIntRect(layerDirtyRect));
+        m_scrollingContentsLayer->setNeedsDisplayInRect(layerDirtyRect);
     }
 }
 

@@ -122,11 +122,11 @@ public:
 
     virtual void setResizable(bool) = 0;
 
-    virtual void addMessageToConsole(MessageSource, MessageLevel, const String& message, unsigned lineNumber, unsigned columnNumber, const String& sourceID) = 0;
+    virtual void addMessageToConsole(MessageSource, MessageLevel, const String& message, unsigned lineNumber, unsigned columnNumber, const String& sourceID, const String& stack = "") = 0;
     // FIXME: Remove this MessageType variant once all the clients are updated.
-    virtual void addMessageToConsole(MessageSource source, MessageType, MessageLevel level, const String& message, unsigned lineNumber, unsigned columnNumber, const String& sourceID)
+    virtual void addMessageToConsole(MessageSource source, MessageType, MessageLevel level, const String& message, unsigned lineNumber, unsigned columnNumber, const String& sourceID, const String& stack = "")
     {
-        addMessageToConsole(source, level, message, lineNumber, columnNumber, sourceID);
+        addMessageToConsole(source, level, message, lineNumber, columnNumber, sourceID, stack);
     }
 
     virtual bool canRunBeforeUnloadConfirmPanel() = 0;
@@ -266,7 +266,6 @@ public:
         FilterTrigger = 1 << 5,
         ScrollableInnerFrameTrigger = 1 << 6,
         AnimatedOpacityTrigger = 1 << 7,
-        LargeAreaTrigger = 1 << 8,
         AllTriggers = 0xFFFFFFFF
     };
     typedef unsigned CompositingTriggerFlags;

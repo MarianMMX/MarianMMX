@@ -13,7 +13,7 @@ void wrapInFunction()
     {
         width: ...,
         height: ...,
-        toDataUrl: function() { ... },
+        toDataURL: function() { ... },
         assignToHTMLImageElement: function(element) { ... }
         toImageData: function() { ... }
     }

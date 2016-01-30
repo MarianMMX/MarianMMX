@@ -1,5 +1,5 @@
 # Copyright (C) 2012 Apple Inc. All rights reserved.
-# Copyright (C) 2015 The Qt Company Ltd
+# Copyright (C) 2013 Digia Plc. and/or its subsidiary(-ies)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

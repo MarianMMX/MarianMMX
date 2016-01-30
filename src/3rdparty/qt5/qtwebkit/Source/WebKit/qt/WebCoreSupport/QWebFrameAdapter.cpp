@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Qt Company Ltd.
+ * Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -195,13 +195,14 @@ void QWebFrameAdapter::handleGestureEvent(QGestureEventFacade* gestureEvent)
 }
 #endif
 
-QVariant QWebFrameAdapter::evaluateJavaScript(const QString &scriptSource)
+QVariant QWebFrameAdapter::evaluateJavaScript(const QString &scriptSource, const QString &location)
 {
     ScriptController* scriptController = frame->script();
     QVariant rc;
+
     if (scriptController) {
         int distance = 0;
-        ScriptValue value = scriptController->executeScript(ScriptSourceCode(scriptSource));
+        ScriptValue value = scriptController->executeScript(ScriptSourceCode(scriptSource, String(location)));
         JSC::ExecState* exec = scriptController->globalObject(mainThreadNormalWorld())->globalExec();
         JSValueRef* ignoredException = 0;
         exec->vm().apiLock().lock();
@@ -209,6 +210,7 @@ QVariant QWebFrameAdapter::evaluateJavaScript(const QString &scriptSource)
         exec->vm().apiLock().unlock();
         rc = JSC::Bindings::convertValueToQVariant(toRef(exec), valueRef, QMetaType::Void, &distance, ignoredException);
     }
+
     return rc;
 }
 
@@ -837,7 +839,7 @@ QWebHitTestResultPrivate::QWebHitTestResultPrivate(const WebCore::HitTestResult 
     innerNode->ref();
     innerNonSharedNode = hitTest.innerNonSharedNode();
     innerNonSharedNode->ref();
-    boundingRect = (innerNonSharedNode && innerNonSharedNode->renderer())? innerNonSharedNode->renderer()->absoluteBoundingBoxRect() : IntRect();
+    boundingRect = innerNonSharedNode ? innerNonSharedNode->renderer()->absoluteBoundingBoxRect() : IntRect();
     WebCore::Image *img = hitTest.image();
     if (img) {
         QPixmap* pix = img->nativeImageForCurrentFrame();
@@ -924,13 +926,9 @@ QWebHitTestResultPrivate::~QWebHitTestResultPrivate()
 
 QWebElement QWebHitTestResultPrivate::elementForInnerNode() const
 {
-    // Uses the similar logic as HitTestResult::innerElement().
-    for (Node* node = innerNonSharedNode; node; node = node->parentNode()) {
-        if (node->isElementNode())
-            return QWebElement(toElement(node));
-    }
-
-    return QWebElement();
+    if (!innerNonSharedNode || !innerNonSharedNode->isElementNode())
+        return QWebElement();
+    return QWebElement(toElement(innerNonSharedNode));
 }
 
 // ======================================================

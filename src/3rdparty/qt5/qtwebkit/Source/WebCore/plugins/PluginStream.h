@@ -52,7 +52,6 @@ namespace WebCore {
     class PluginStreamClient {
     public:
         virtual ~PluginStreamClient() {}
-        virtual void streamDidSaveTempFile(const String &) {}
         virtual void streamDidFinishLoading(PluginStream*) {}
     };
 

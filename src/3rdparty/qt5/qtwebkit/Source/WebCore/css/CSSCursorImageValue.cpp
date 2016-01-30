@@ -67,16 +67,8 @@ CSSCursorImageValue::CSSCursorImageValue(PassRefPtr<CSSValue> imageValue, bool h
 {
 }
 
-inline void CSSCursorImageValue::detachPendingImage()
-{
-    if (m_image && m_image->isPendingImage())
-        static_cast<StylePendingImage&>(*m_image).detachFromCSSValue();
-}
-
 CSSCursorImageValue::~CSSCursorImageValue()
 {
-    detachPendingImage();
-
 #if ENABLE(SVG)
     if (!isSVGCursor())
         return;
@@ -161,7 +153,6 @@ StyleImage* CSSCursorImageValue::cachedImage(CachedResourceLoader* loader)
             RefPtr<CSSImageValue> imageValue = static_cast<CSSImageValue*>(m_imageValue.get());
             // FIXME: This will fail if the <cursor> element is in a shadow DOM (bug 59827)
             if (SVGCursorElement* cursorElement = resourceReferencedByCursorElement(imageValue->url(), loader->document())) {
-                detachPendingImage();
                 RefPtr<CSSImageValue> svgImageValue = CSSImageValue::create(cursorElement->href());
                 StyleCachedImage* cachedImage = svgImageValue->cachedImage(loader);
                 m_image = cachedImage;
@@ -170,10 +161,8 @@ StyleImage* CSSCursorImageValue::cachedImage(CachedResourceLoader* loader)
         }
 #endif
 
-        if (m_imageValue->isImageValue()) {
-            detachPendingImage();
+        if (m_imageValue->isImageValue())
             m_image = static_cast<CSSImageValue*>(m_imageValue.get())->cachedImage(loader);
-        }
     }
 
     if (m_image && m_image->isCachedImage())
@@ -216,8 +205,7 @@ String CSSCursorImageValue::cachedImageURL()
 
 void CSSCursorImageValue::clearCachedImage()
 {
-    detachPendingImage();
-    m_image.clear();
+    m_image = 0;
     m_accessedImage = false;
 }
 

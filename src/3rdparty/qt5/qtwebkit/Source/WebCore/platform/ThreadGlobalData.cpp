@@ -32,7 +32,6 @@
 #include "InspectorCounters.h"
 #include "ThreadTimers.h"
 #include <wtf/MainThread.h>
-#include <wtf/PassOwnPtr.h>
 #include <wtf/WTFThreadData.h>
 #include <wtf/text/StringImpl.h>
 

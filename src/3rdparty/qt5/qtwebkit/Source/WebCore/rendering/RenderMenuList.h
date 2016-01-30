@@ -54,7 +54,6 @@ public:
     void setOptionsChanged(bool changed) { m_needsOptionsWidthUpdate = changed; }
 
     void didSetSelectedIndex(int listIndex);
-    void setTextFromOption(int optionIndex);
 
     String text() const;
 
@@ -130,6 +129,7 @@ private:
     void createInnerBlock();
     void adjustInnerStyle();
     void setText(const String&);
+    void setTextFromOption(int optionIndex);
     void updateOptionsWidth();
 
     void didUpdateActiveOption(int optionIndex);

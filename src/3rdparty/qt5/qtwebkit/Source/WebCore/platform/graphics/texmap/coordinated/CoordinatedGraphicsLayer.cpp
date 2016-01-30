@@ -36,7 +36,9 @@
 #include "TextureMapperPlatformLayer.h"
 #include <wtf/CurrentTime.h>
 #include <wtf/HashMap.h>
+#ifndef NDEBUG
 #include <wtf/TemporaryChange.h>
+#endif
 #include <wtf/text/CString.h>
 
 namespace WebCore {
@@ -100,7 +102,9 @@ void CoordinatedGraphicsLayer::didChangeGeometry()
 
 CoordinatedGraphicsLayer::CoordinatedGraphicsLayer(GraphicsLayerClient* client)
     : GraphicsLayer(client)
+#ifndef NDEBUG
     , m_isPurging(false)
+#endif
     , m_shouldUpdateVisibleRect(true)
     , m_shouldSyncLayerState(true)
     , m_shouldSyncChildren(true)
@@ -992,8 +996,6 @@ void CoordinatedGraphicsLayer::removeTile(uint32_t tileID)
 {
     ASSERT(m_coordinator);
     ASSERT(m_coordinator->isFlushingLayerChanges() || m_isPurging);
-    if (m_isPurging)
-        return;
     m_layerState.tilesToRemove.append(tileID);
 }
 
@@ -1045,7 +1047,9 @@ void CoordinatedGraphicsLayer::updateContentBuffers()
 
 void CoordinatedGraphicsLayer::purgeBackingStores()
 {
+#ifndef NDEBUG
     TemporaryChange<bool> updateModeProtector(m_isPurging, true);
+#endif
     m_mainBackingStore.clear();
     m_previousBackingStore.clear();
 

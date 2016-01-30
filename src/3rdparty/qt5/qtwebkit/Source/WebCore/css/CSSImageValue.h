@@ -61,7 +61,6 @@ public:
 private:
     explicit CSSImageValue(const String& url);
     CSSImageValue(const String& url, StyleImage*);
-    void detachPendingImage();
 
     String m_url;
     RefPtr<StyleImage> m_image;

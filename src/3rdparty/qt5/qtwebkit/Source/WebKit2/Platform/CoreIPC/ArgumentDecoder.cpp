@@ -129,19 +129,13 @@ bool ArgumentDecoder::decodeVariableLengthByteArray(DataReference& dataReference
     return true;
 }
 
-template<typename Type>
-static void decodeValueFromBuffer(Type& value, uint8_t*& bufferPosition)
-{
-    memcpy(&value, bufferPosition, sizeof(value));
-    bufferPosition += sizeof(Type);
-}
-
 bool ArgumentDecoder::decode(bool& result)
 {
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
     
-    decodeValueFromBuffer(result, m_bufferPos);
+    result = *reinterpret_cast<bool*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -150,7 +144,8 @@ bool ArgumentDecoder::decode(uint8_t& result)
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
 
-    decodeValueFromBuffer(result, m_bufferPos);
+    result = *reinterpret_cast<uint8_t*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -159,7 +154,8 @@ bool ArgumentDecoder::decode(uint16_t& result)
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
 
-    decodeValueFromBuffer(result, m_bufferPos);
+    result = *reinterpret_cast_ptr<uint16_t*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -167,8 +163,9 @@ bool ArgumentDecoder::decode(uint32_t& result)
 {
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
-
-    decodeValueFromBuffer(result, m_bufferPos);
+    
+    result = *reinterpret_cast_ptr<uint32_t*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -177,7 +174,8 @@ bool ArgumentDecoder::decode(uint64_t& result)
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
     
-    decodeValueFromBuffer(result, m_bufferPos);
+    result = *reinterpret_cast_ptr<uint64_t*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -186,7 +184,8 @@ bool ArgumentDecoder::decode(int32_t& result)
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
     
-    decodeValueFromBuffer(result, m_bufferPos);
+    result = *reinterpret_cast_ptr<uint32_t*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -194,8 +193,9 @@ bool ArgumentDecoder::decode(int64_t& result)
 {
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
-
-    decodeValueFromBuffer(result, m_bufferPos);
+    
+    result = *reinterpret_cast_ptr<uint64_t*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -203,8 +203,9 @@ bool ArgumentDecoder::decode(float& result)
 {
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
-
-    decodeValueFromBuffer(result, m_bufferPos);
+    
+    result = *reinterpret_cast_ptr<float*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 
@@ -213,7 +214,8 @@ bool ArgumentDecoder::decode(double& result)
     if (!alignBufferPosition(sizeof(result), sizeof(result)))
         return false;
     
-    decodeValueFromBuffer(result, m_bufferPos);
+    result = *reinterpret_cast_ptr<double*>(m_bufferPos);
+    m_bufferPos += sizeof(result);
     return true;
 }
 

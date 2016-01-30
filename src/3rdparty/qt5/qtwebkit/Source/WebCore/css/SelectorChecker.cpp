@@ -880,7 +880,7 @@ bool SelectorChecker::checkScrollbarPseudoClass(const SelectorCheckingContext& c
             return false;
         }
     case CSSSelector::PseudoCornerPresent:
-        return scrollbar->scrollableArea() ? scrollbar->scrollableArea()->isScrollCornerVisible() : false;
+        return scrollbar->scrollableArea()->isScrollCornerVisible();
     default:
         return false;
     }

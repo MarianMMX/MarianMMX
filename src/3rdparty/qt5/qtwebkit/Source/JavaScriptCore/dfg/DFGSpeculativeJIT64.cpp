@@ -4791,10 +4791,6 @@ void SpeculativeJIT::compile(Node* node)
         // This is a no-op.
         noResult(node);
         break;
-
-    case Unreachable:
-        RELEASE_ASSERT_NOT_REACHED();
-        break;
         
     case Nop:
         RELEASE_ASSERT_NOT_REACHED();

@@ -30,7 +30,6 @@
 
 QT_BEGIN_NAMESPACE
 class QQmlComponent;
-class QQmlWebChannel;
 QT_END_NAMESPACE
 class QWebNavigationRequest;
 class QQuickWebPage;
@@ -44,7 +43,6 @@ class QWebPreferences;
 class QWebPermissionRequest;
 class QWebKitTest;
 class QQuickNetworkReply;
-class QWebChannelWebKitTransport;
 
 namespace WTR {
 class PlatformWebView;
@@ -282,9 +280,6 @@ class QWEBKIT_EXPORT QQuickWebViewExperimental : public QObject {
     Q_PROPERTY(QString userAgent READ userAgent WRITE setUserAgent NOTIFY userAgentChanged)
     Q_PROPERTY(QList<QUrl> userScripts READ userScripts WRITE setUserScripts NOTIFY userScriptsChanged)
     Q_PROPERTY(QUrl remoteInspectorUrl READ remoteInspectorUrl NOTIFY remoteInspectorUrlChanged FINAL)
-#ifdef HAVE_WEBCHANNEL
-    Q_PROPERTY(QQmlWebChannel* webChannel READ webChannel WRITE setWebChannel NOTIFY webChannelChanged)
-#endif
     Q_ENUMS(NavigationRequestActionExperimental)
     Q_FLAGS(FindFlags)
 
@@ -362,12 +357,6 @@ public:
     static void setFlickableViewportEnabled(bool enable);
     static bool flickableViewportEnabled();
 
-#ifdef HAVE_WEBCHANNEL
-    QQmlWebChannel* webChannel() const;
-    void setWebChannel(QQmlWebChannel* channel);
-    void postQtWebChannelTransportMessage(const QByteArray& message);
-#endif
-
 public Q_SLOTS:
     void goBackTo(int index);
     void goForwardTo(int index);
@@ -405,21 +394,12 @@ Q_SIGNALS:
     void processDidBecomeUnresponsive();
     void processDidBecomeResponsive();
 
-#ifdef HAVE_WEBCHANNEL
-    void webChannelChanged(QQmlWebChannel* channel);
-#endif
-
 private:
     QQuickWebViewExperimental(QQuickWebView* webView, QQuickWebViewPrivate* webViewPrivate);
     QQuickWebView* q_ptr;
     QQuickWebViewPrivate* d_ptr;
     QObject* schemeParent;
     QWebKitTest* m_test;
-
-#ifdef HAVE_WEBCHANNEL
-    QQmlWebChannel* m_webChannel;
-    QWebChannelWebKitTransport* m_webChannelTransport;
-#endif
 
     friend class WebKit::QtWebPageUIClient;
 

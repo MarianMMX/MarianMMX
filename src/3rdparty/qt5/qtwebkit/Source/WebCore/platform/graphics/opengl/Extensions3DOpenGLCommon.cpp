@@ -36,9 +36,7 @@
 #include <BlackBerryPlatformLog.h>
 #endif
 
-#if PLATFORM(QT)
-#include <private/qopenglextensions_p.h>
-#elif USE(OPENGL_ES_2)
+#if USE(OPENGL_ES_2)
 #include "OpenGLESShims.h"
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -62,7 +60,7 @@ Extensions3DOpenGLCommon::Extensions3DOpenGLCommon(GraphicsContext3D* context)
     , m_maySupportMultisampling(true)
     , m_requiresBuiltInFunctionEmulation(false)
 {
-    m_vendor = String(reinterpret_cast<const char*>(m_context->m_functions->glGetString(GL_VENDOR)));
+    m_vendor = String(reinterpret_cast<const char*>(::glGetString(GL_VENDOR)));
 
     Vector<String> vendorComponents;
     m_vendor.lower().split(' ', vendorComponents);

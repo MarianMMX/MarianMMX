@@ -3,7 +3,6 @@ TARGET = platformplugin
 
 QT += core gui widgets
 CONFIG += plugin
-use?(QT_MULTIMEDIA): QT += multimedia multimediawidgets
 
 ## load mobilityconfig if mobility is available
 load(mobilityconfig, true)

@@ -87,7 +87,6 @@ private:
     bool hasPendingTasks() const;
 
     void taskTimerFired(Timer<IDBTransactionBackendImpl>*);
-    void asyncDerefTimerFired(Timer<IDBTransactionBackendImpl>*);
     void closeOpenCursors();
 
     const int64_t m_id;
@@ -108,7 +107,6 @@ private:
 
     // FIXME: delete the timer once we have threads instead.
     Timer<IDBTransactionBackendImpl> m_taskTimer;
-    Timer<IDBTransactionBackendImpl> m_asyncDerefTimer;
     int m_pendingPreemptiveEvents;
 
     HashSet<IDBCursorBackendImpl*> m_openCursors;

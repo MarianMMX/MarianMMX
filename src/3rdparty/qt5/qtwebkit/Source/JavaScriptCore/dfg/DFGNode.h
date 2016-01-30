@@ -677,7 +677,8 @@ struct Node {
         case Jump:
         case Branch:
         case Return:
-        case Unreachable:
+        case Throw:
+        case ThrowReferenceError:
             return true;
         default:
             return false;

@@ -423,7 +423,7 @@ static void checkMidpoints(LineMidpointState& lineMidpointState, InlineIterator&
         if (currpoint == lBreak) {
             // We hit the line break before the start point.  Shave off the start point.
             lineMidpointState.numMidpoints--;
-            if (endpoint.m_obj->style()->collapseWhiteSpace() && endpoint.m_obj->isText())
+            if (endpoint.m_obj->style()->collapseWhiteSpace())
                 endpoint.m_pos--;
         }
     }
@@ -1900,7 +1900,7 @@ void RenderBlock::layoutRunsAndFloatsInRange(LineLayoutState& layoutState, Inlin
                 if (layoutState.usesRepaintBounds())
                     layoutState.updateRepaintRangeFromBox(lineBox);
 
-                if (paginated) {
+                if (paginated && !isTableCell()) {
                     LayoutUnit adjustment = 0;
                     adjustLinePositionForPagination(lineBox, adjustment, layoutState.flowThread());
                     if (adjustment) {

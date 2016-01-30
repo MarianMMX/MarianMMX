@@ -287,8 +287,6 @@ public:
 
     void setUsesOverlayScrollbars(bool enabled);
 
-    void setDelegatesMenuListRendering(bool);
-
     String getCurrentCursorInfo(Document*, ExceptionCode&);
 
     String markerTextForListItem(Element*, ExceptionCode&);

@@ -595,7 +595,6 @@ public:
     void setButterfly(VM&, Butterfly*, Structure*);
     void setButterflyWithoutChangingStructure(Butterfly*); // You probably don't want to call this.
         
-    void setStructure(VM&, Structure*, Butterfly* = 0);
     void setStructureAndReallocateStorageIfNecessary(VM&, unsigned oldCapacity, Structure*);
     void setStructureAndReallocateStorageIfNecessary(VM&, Structure*);
 
@@ -1110,7 +1109,7 @@ inline void JSObject::setButterfly(VM& vm, Butterfly* butterfly, Structure* stru
 {
     ASSERT(structure);
     ASSERT(!butterfly == (!structure->outOfLineCapacity() && !hasIndexingHeader(structure->indexingType())));
-    setStructure(vm, structure, butterfly);
+    setStructure(vm, structure);
     m_butterfly = butterfly;
 }
 
@@ -1317,7 +1316,7 @@ inline bool JSObject::putDirectInternal(VM& vm, PropertyName propertyName, JSVal
                 return true;
             }
             // case (2) Despecify, fall through to (3).
-            setStructure(vm, Structure::despecifyFunctionTransition(vm, structure(), propertyName), m_butterfly);
+            setStructure(vm, Structure::despecifyFunctionTransition(vm, structure(), propertyName));
         }
 
         // case (3) set the slot, do the put, return.
@@ -1345,18 +1344,12 @@ inline bool JSObject::putDirectInternal(VM& vm, PropertyName propertyName, JSVal
     return true;
 }
 
-inline void JSObject::setStructure(VM& vm, Structure* structure, Butterfly* butterfly)
-{
-    JSCell::setStructure(vm, structure);
-    ASSERT_UNUSED(butterfly, !butterfly == !(structure->outOfLineCapacity() || hasIndexingHeader(structure->indexingType())));
-}
-
 inline void JSObject::setStructureAndReallocateStorageIfNecessary(VM& vm, unsigned oldCapacity, Structure* newStructure)
 {
     ASSERT(oldCapacity <= newStructure->outOfLineCapacity());
     
     if (oldCapacity == newStructure->outOfLineCapacity()) {
-        setStructure(vm, newStructure, m_butterfly);
+        setStructure(vm, newStructure);
         return;
     }
     

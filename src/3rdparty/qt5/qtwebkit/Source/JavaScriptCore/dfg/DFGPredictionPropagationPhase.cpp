@@ -396,7 +396,7 @@ private:
         case GetMyScope:
         case SkipTopScope:
         case SkipScope: {
-            changed |= setPrediction(SpecObjectOther);
+            changed |= setPrediction(SpecCellOther);
             break;
         }
             
@@ -497,7 +497,7 @@ private:
             break;
 
         case GetScope:
-            changed |= setPrediction(SpecObjectOther);
+            changed |= setPrediction(SpecCellOther);
             break;
 
         case Identity:
@@ -539,7 +539,6 @@ private:
         case PutGlobalVar:
         case PutGlobalVarCheck:
         case CheckWatchdogTimer:
-        case Unreachable:
             break;
             
         // These gets ignored because it doesn't do anything.

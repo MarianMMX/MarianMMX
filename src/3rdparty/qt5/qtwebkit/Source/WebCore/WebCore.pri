@@ -121,15 +121,15 @@ enable?(XSLT) {
         QT *= xmlpatterns
     }
 } else:!mac:use?(LIBXML2) {
-    PKGCONFIG += libxml-2.0
+    win32-msvc* {
+        LIBS += -llibxml2
+    } else {
+        PKGCONFIG += libxml-2.0
+    }
 }
 
 use?(ZLIB) {
-    if(unix|mingw):LIBS += -lz
-    else {
-        isEmpty(ZLIB_LIBS): LIBS += zdll.lib
-        else: LIBS += $$ZLIB_LIBS
-    }
+    LIBS += -lz
 }
 
 enable?(NETSCAPE_PLUGIN_API) {
@@ -252,14 +252,8 @@ have?(sqlite3) {
 
 use?(system_leveldb): LIBS += -lleveldb -lmemenv
 
-use?(libjpeg) {
-    msvc: LIBS += libjpeg.lib
-    else: LIBS += -ljpeg
-}
-use?(libpng) {
-    if(unix|mingw): LIBS += -lpng
-    else:win32:     LIBS += libpng.lib
-}
+use?(libjpeg): LIBS += -ljpeg
+use?(libpng): LIBS += -lpng
 use?(webp): LIBS += -lwebp
 
 enable?(opencl) {
@@ -289,12 +283,10 @@ win32 {
 }
 
 # Remove whole program optimizations due to miscompilations
-win32-msvc*|wince* {
+win32-msvc2005|win32-msvc2008|win32-msvc2010|win32-msvc2012|win32-msvc2013|wince*:{
     QMAKE_CFLAGS_LTCG -= -GL
     QMAKE_CXXFLAGS_LTCG -= -GL
-}
 
-win32-msvc*|wince* {
     # Disable incremental linking for windows 32bit OS debug build as WebKit is so big
     # that linker failes to link incrementally in debug mode.
     ARCH = $$(PROCESSOR_ARCHITECTURE)

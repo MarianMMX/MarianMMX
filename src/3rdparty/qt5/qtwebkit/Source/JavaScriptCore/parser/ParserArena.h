@@ -71,10 +71,6 @@ namespace JSC {
     template <typename T>
     ALWAYS_INLINE const Identifier& IdentifierArena::makeIdentifier(VM* vm, const T* characters, size_t length)
     {
-        if (length == 0) {
-            m_identifiers.append(Identifier(Identifier::EmptyIdentifier));
-            return m_identifiers.last();
-        }
         if (characters[0] >= MaximumCachableCharacter) {
             m_identifiers.append(Identifier(vm, characters, length));
             return m_identifiers.last();
@@ -96,10 +92,6 @@ namespace JSC {
 
     ALWAYS_INLINE const Identifier& IdentifierArena::makeIdentifierLCharFromUChar(VM* vm, const UChar* characters, size_t length)
     {
-        if (length == 0) {
-            m_identifiers.append(Identifier(Identifier::EmptyIdentifier));
-            return m_identifiers.last();
-        }
         if (characters[0] >= MaximumCachableCharacter) {
             m_identifiers.append(Identifier::createLCharFromUChar(vm, characters, length));
             return m_identifiers.last();

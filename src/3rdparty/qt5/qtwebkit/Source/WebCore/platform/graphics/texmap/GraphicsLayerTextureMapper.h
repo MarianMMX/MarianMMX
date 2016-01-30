@@ -176,7 +176,6 @@ private:
     float m_debugBorderWidth;
 
     TextureMapperPlatformLayer* m_contentsLayer;
-    TextureMapperPlatformLayer* m_directLayer;
     FloatRect m_needsDisplayRect;
     GraphicsLayerAnimations m_animations;
     double m_animationStartTime;

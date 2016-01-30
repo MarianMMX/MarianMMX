@@ -80,14 +80,23 @@ static void internalAddMessage(Page* page, MessageType type, MessageLevel level,
     const ScriptCallFrame& lastCaller = callStack->at(0);
 
     String message;
-    bool gotMessage = arguments->getFirstArgumentAsString(message);
-    InspectorInstrumentation::addMessageToConsole(page, ConsoleAPIMessageSource, type, level, message, state, arguments);
+    for (unsigned i = 0; i < arguments->argumentCount(); ++i) {
+        message.append(arguments->argumentAt(i).toString(arguments->globalState()));
+        if (i < arguments->argumentCount() - 1)
+            message.append(' ');
+    }
+
+    if (level == ErrorMessageLevel && callStack) {
+        String stack = callStack->buildInspectorArray()->toJSONString();
+        page->chrome().client()->addMessageToConsole(ConsoleAPIMessageSource, type, level, message, lastCaller.lineNumber(), lastCaller.columnNumber(), lastCaller.sourceURL(), stack);
+    } else {
+        page->chrome().client()->addMessageToConsole(ConsoleAPIMessageSource, type, level, message, lastCaller.lineNumber(), lastCaller.columnNumber(), lastCaller.sourceURL());
+    }
+
+    InspectorInstrumentation::addMessageToConsole(page, ConsoleAPIMessageSource, type, level, message, state, arguments.get());
 
     if (page->settings()->privateBrowsingEnabled())
         return;
-
-    if (gotMessage)
-        page->chrome().client()->addMessageToConsole(ConsoleAPIMessageSource, type, level, message, lastCaller.lineNumber(), lastCaller.columnNumber(), lastCaller.sourceURL());
 
     if (!page->settings()->logsPageMessagesToSystemConsoleEnabled() && !PageConsole::shouldPrintExceptions())
         return;
@@ -235,12 +244,12 @@ void Console::timeStamp(PassRefPtr<ScriptArguments> arguments)
 
 void Console::group(ScriptState* state, PassRefPtr<ScriptArguments> arguments)
 {
-    InspectorInstrumentation::addMessageToConsole(page(), ConsoleAPIMessageSource, StartGroupMessageType, LogMessageLevel, String(), state, arguments);
+    InspectorInstrumentation::addMessageToConsole(page(), ConsoleAPIMessageSource, StartGroupMessageType, LogMessageLevel, String(), state, arguments.get());
 }
 
 void Console::groupCollapsed(ScriptState* state, PassRefPtr<ScriptArguments> arguments)
 {
-    InspectorInstrumentation::addMessageToConsole(page(), ConsoleAPIMessageSource, StartGroupCollapsedMessageType, LogMessageLevel, String(), state, arguments);
+    InspectorInstrumentation::addMessageToConsole(page(), ConsoleAPIMessageSource, StartGroupCollapsedMessageType, LogMessageLevel, String(), state, arguments.get());
 }
 
 void Console::groupEnd()

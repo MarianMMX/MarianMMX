@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Qt Company Ltd.
+ * Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -168,6 +168,7 @@ public:
     virtual QSize viewportSize() const = 0;
     virtual QWebPageAdapter* createWindow(bool /*dialog*/) = 0;
     virtual QObject* handle() = 0;
+    virtual void javaScriptError(const QString& message, int lineNumber, const QString& sourceID, const QString& stack) = 0;
     virtual void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID) = 0;
     virtual void javaScriptAlert(QWebFrameAdapter*, const QString& msg) = 0;
     virtual bool javaScriptConfirm(QWebFrameAdapter*, const QString& msg) = 0;
@@ -266,8 +267,6 @@ public:
 
     void setVisibilityState(VisibilityState);
     VisibilityState visibilityState() const;
-
-    void setPluginsVisible(bool visible);
 
     static QWebPageAdapter* kit(WebCore::Page*);
     WebCore::ViewportArguments viewportArguments() const;
@@ -371,7 +370,6 @@ public:
     QBasicTimer tripleClickTimer;
 
     bool clickCausedFocus;
-    bool mousePressed;
     bool m_useNativeVirtualKeyAsDOMKey;
     quint64 m_totalBytes;
     quint64 m_bytesReceived;

@@ -265,7 +265,6 @@ HTMLMediaElement::HTMLMediaElement(const QualifiedName& tagName, Document* docum
     , m_readyState(HAVE_NOTHING)
     , m_readyStateMaximum(HAVE_NOTHING)
     , m_volume(1.0f)
-    , m_volumeInitialized(false)
     , m_lastSeekTime(0)
     , m_previousProgressTime(numeric_limits<double>::max())
     , m_lastTimeUpdateEventWallTime(0)
@@ -375,10 +374,8 @@ HTMLMediaElement::~HTMLMediaElement()
     }
 #endif
 
-    if (m_mediaController) {
+    if (m_mediaController)
         m_mediaController->removeMediaElement(this);
-        m_mediaController = 0;
-    }
 
 #if ENABLE(MEDIA_SOURCE)
     setSourceState(MediaSource::closedKeyword());
@@ -2382,13 +2379,6 @@ double HTMLMediaElement::duration() const
 
 bool HTMLMediaElement::paused() const
 {
-    // As of this writing, JavaScript garbage collection calls this function directly. In the past
-    // we had problems where this was called on an object after a bad cast. The assertion below
-    // made our regression test detect the problem, so we should keep it because of that. But note
-    // that the value of the assertion relies on the compiler not being smart enough to know that
-    // isHTMLUnknownElement is guaranteed to return false for an HTMLMediaElement.
-    ASSERT(!isHTMLUnknownElement());
-
     return m_paused;
 }
 
@@ -2737,7 +2727,6 @@ void HTMLMediaElement::setVolume(double vol, ExceptionCode& ec)
     
     if (m_volume != vol) {
         m_volume = vol;
-        m_volumeInitialized = true;
         updateVolume();
         scheduleEvent(eventNames().volumechangeEvent);
     }
@@ -5104,11 +5093,6 @@ void HTMLMediaElement::mediaPlayerPause()
 void HTMLMediaElement::mediaPlayerPlay()
 {
     play();
-}
-
-bool HTMLMediaElement::mediaPlayerPlatformVolumeConfigurationRequired() const
-{
-    return !m_volumeInitialized;
 }
 
 bool HTMLMediaElement::mediaPlayerIsPaused() const

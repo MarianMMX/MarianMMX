@@ -36,6 +36,7 @@ contains(CONFIG, texmap): DEFINES += WTF_USE_TEXTURE_MAPPER=1
 use?(PLUGIN_BACKEND_XLIB): PKGCONFIG += x11
 
 QT += network widgets widgets-private
+have?(QTQUICK): QT += quick
 have?(QTPRINTSUPPORT): QT += printsupport
 
 use?(TEXTURE_MAPPER_GL)|enable?(WEBGL) {
@@ -45,7 +46,7 @@ QT += webkit
 
 use?(3D_GRAPHICS): WEBKIT += ANGLE
 
-WEBKIT += javascriptcore wtf webcore webkit1
+WEBKIT += javascriptcore wtf webcore
 
 MODULE = webkitwidgets
 CONFIG += creating_module
@@ -57,10 +58,6 @@ MODULE_BASE_OUTDIR = $$ROOT_BUILD_DIR
 # This is the canonical list of dependencies for the public API of
 # the QtWebKitWidgets library, and will end up in the library's prl file.
 QT_API_DEPENDS = core gui widgets network webkit
-
-# We load the relevant modules here, so that the effects of each module
-# on the QT variable can be picked up when we later load(qt_module).
-load(webkit_modules)
 
 # ---------------- Custom developer-build handling -------------------
 #
@@ -74,8 +71,6 @@ load(webkit_modules)
 !production_build: CONFIG += force_independent
 
 BASE_TARGET = $$TARGET
-
-CMAKE_MODULE_TESTS = $$ROOT_WEBKIT_DIR/Source/WebKit/qt/tests/cmake
 
 load(qt_module)
 

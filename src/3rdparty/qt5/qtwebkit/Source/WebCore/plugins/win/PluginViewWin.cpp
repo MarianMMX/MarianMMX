@@ -345,17 +345,6 @@ static bool isWindowsMessageUserGesture(UINT message)
     }
 }
 
-static inline bool isWebViewVisible(FrameView* view)
-{
-#if PLATFORM(QT)
-    if (PlatformPageClient client = view->hostWindow()->platformPageClient())
-        return client->isViewVisible();
-    return false;
-#else
-    return true;
-#endif // PLATFORM(QT)
-}
-
 static inline IntPoint contentsToNativeWindow(FrameView* view, const IntPoint& point)
 {
 #if PLATFORM(QT)
@@ -522,10 +511,9 @@ void PluginView::show()
 {
     setSelfVisible(true);
 
-    if (isParentVisible() && platformPluginWidget()) {
+    if (isParentVisible() && platformPluginWidget())
         ShowWindow(platformPluginWidget(), SW_SHOWNA);
-        forceRedraw();
-    }
+
     Widget::show();
 }
 
@@ -831,10 +819,9 @@ void PluginView::setParentVisible(bool visible)
     Widget::setParentVisible(visible);
 
     if (isSelfVisible() && platformPluginWidget()) {
-        if (visible) {
+        if (visible)
             ShowWindow(platformPluginWidget(), SW_SHOWNA);
-            forceRedraw();
-        } else
+        else
             ShowWindow(platformPluginWidget(), SW_HIDE);
     }
 }
@@ -878,8 +865,6 @@ void PluginView::setNPWindowRect(const IntRect& rect)
         JSC::JSLock::DropAllLocks dropAllLocks(JSDOMWindowBase::commonVM());
         setCallingPlugin(true);
         m_plugin->pluginFuncs()->setwindow(m_instance, &m_npWindow);
-        if (m_plugin->quirks().contains(PluginQuirkNeedsSetWindowTwice))
-            m_plugin->pluginFuncs()->setwindow(m_instance, &m_npWindow);
         setCallingPlugin(false);
 
         m_haveCalledSetWindow = true;
@@ -1032,7 +1017,7 @@ bool PluginView::platformStart()
 #endif
 
         DWORD flags = WS_CHILD;
-        if (isSelfVisible() && isWebViewVisible(toFrameView(parent())))
+        if (isSelfVisible())
             flags |= WS_VISIBLE;
 
         HWND parentWindowHandle = windowHandleForPageClient(m_parentFrame->view()->hostWindow()->platformPageClient());

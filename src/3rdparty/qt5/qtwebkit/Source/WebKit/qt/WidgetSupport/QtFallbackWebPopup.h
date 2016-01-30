@@ -22,7 +22,6 @@
 
 #include "qwebkitplatformplugin.h"
 #include <wtf/Platform.h>
-#include <QtCore/QPointer>
 
 #ifndef QT_NO_COMBOBOX
 
@@ -57,7 +56,7 @@ private Q_SLOTS:
     void deleteComboBox();
 
 private:
-    QPointer<QtWebComboBox> m_combo;
+    QtWebComboBox* m_combo;
     const QWebPageAdapter* m_page;
     QRect m_geometry;
     QFont m_font;

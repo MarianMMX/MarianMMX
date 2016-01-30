@@ -55,7 +55,6 @@ class WebPageProxy;
 
 class QWebNavigationHistory;
 class QWebKitTest;
-class QWebChannelWebKitTransport;
 
 QT_BEGIN_NAMESPACE
 class QQmlComponent;
@@ -138,9 +137,6 @@ public:
     void handleDownloadRequest(WebKit::DownloadProxy*);
 
     void didReceiveMessageFromNavigatorQtObject(WKStringRef message);
-#ifdef HAVE_WEBCHANNEL
-    void didReceiveMessageFromNavigatorQtWebChannelTransportObject(WKStringRef message);
-#endif
 
     WebCore::CoordinatedGraphicsScene* coordinatedGraphicsScene();
     float deviceScaleFactor();

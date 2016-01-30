@@ -173,8 +173,6 @@ protected:
 
     virtual QSharedPointer<StylePainter> getStylePainter(const PaintInfo&) = 0;
 
-    virtual bool shouldShowPlaceholderWhenFocused() const OVERRIDE { return true; }
-
     bool supportsFocus(ControlPart) const;
 
     IntRect convertToPaintingRect(RenderObject* inputRenderer, const RenderObject* partRenderer, IntRect partRect, const IntRect& localOffset) const;

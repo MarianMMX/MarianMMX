@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Qt Company Ltd.
+ * Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 #include <QString>
 #include <qwebkitglobal.h>
 
-class WEBKIT_EXPORTDATA QtPluginWidgetAdapter : public QObject {
+class QtPluginWidgetAdapter : public QObject {
     Q_OBJECT
 public:
     QtPluginWidgetAdapter();

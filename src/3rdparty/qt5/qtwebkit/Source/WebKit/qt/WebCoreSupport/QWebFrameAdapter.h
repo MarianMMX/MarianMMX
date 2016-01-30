@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Qt Company Ltd.
+ * Copyright (C) 2012 Digia Plc and/or its subsidiary(-ies).
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -155,7 +155,7 @@ public:
 #endif
     QWebFrameAdapter* createFrame(QWebFrameData*);
 
-    QVariant evaluateJavaScript(const QString& scriptSource);
+    QVariant evaluateJavaScript(const QString& scriptSource, const QString& location);
     void addToJavaScriptWindowObject(const QString& name, QObject*, ValueOwnership);
 
     QString toHtml() const;

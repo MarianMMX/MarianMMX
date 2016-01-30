@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2015 The Qt Company Ltd
+    Copyright (C) 2008, 2012 Digia Plc. and/or its subsidiary(-ies)
     Copyright (C) 2007 Staikos Computing Services Inc.  <info@staikos.net>
     Copyright (C) 2008 Holger Hans Peter Freyther
 
@@ -41,7 +41,7 @@
 
 #include <QCoreApplication>
 
-static const int gMaxRedirections = 10;
+static const int gMaxRedirections = 20;
 
 namespace WebCore {
 
@@ -50,11 +50,10 @@ FormDataIODevice::FormDataIODevice(FormData* data)
     , m_currentDelta(0)
     , m_fileSize(0)
     , m_dataSize(0)
-    , m_formData(data)
 {
     setOpenMode(FormDataIODevice::ReadOnly);
 
-    prepareFormElements();
+    prepareFormElements(data);
     prepareCurrentElement();
     computeSize();
 }
@@ -64,29 +63,19 @@ FormDataIODevice::~FormDataIODevice()
     delete m_currentFile;
 }
 
-bool FormDataIODevice::reset()
+void FormDataIODevice::prepareFormElements(FormData* formData)
 {
-    if (m_currentFile)
-        m_currentFile->close();
-
-    m_currentDelta = 0;
-    m_formElements = m_formData->elements();
-
-    prepareCurrentElement();
-    return true;
-}
-
-void FormDataIODevice::prepareFormElements()
-{
-    if (!m_formData)
+    if (!formData)
         return;
 
+    RefPtr<FormData> formDataRef(formData);
+
 #if ENABLE(BLOB)
-    m_formData = m_formData->resolveBlobReferences();
+    formDataRef = formDataRef->resolveBlobReferences();
 #endif
 
     // Take a deep copy of the FormDataElements
-    m_formElements = m_formData->elements();
+    m_formElements = formDataRef->elements();
 }
 
 
@@ -464,7 +453,7 @@ QNetworkReplyHandler::QNetworkReplyHandler(ResourceHandle* handle, LoadType load
         m_method = QNetworkAccessManager::PostOperation;
     else if (r.httpMethod() == "PUT")
         m_method = QNetworkAccessManager::PutOperation;
-    else if (r.httpMethod() == "DELETE" && !r.httpBody()) // A delete with a body is a custom operation.
+    else if (r.httpMethod() == "DELETE")
         m_method = QNetworkAccessManager::DeleteOperation;
     else
         m_method = QNetworkAccessManager::CustomOperation;
@@ -683,10 +672,6 @@ void QNetworkReplyHandler::forwardData()
 {
     ASSERT(m_replyWrapper && m_replyWrapper->reply() && !wasAborted() && !m_replyWrapper->wasRedirected());
 
-    // reply may be closed if reply->close() or reply->abort() is called
-    if (!m_replyWrapper->reply()->isReadable())
-        return;
-
     ResourceHandleClient* client = m_resourceHandle->client();
     if (!client)
         return;
@@ -702,12 +687,9 @@ void QNetworkReplyHandler::forwardData()
         // -1 means we do not provide any data about transfer size to inspector so it would use
         // Content-Length headers or content size to show transfer size.
         client->didReceiveData(m_resourceHandle, buffer, readSize, -1);
-        // Check if the request has been aborted or this reply-handler was otherwise released.
-        if (wasAborted() || !m_replyWrapper)
-            break;
     }
     delete[] buffer;
-    if (bytesAvailable > 0 && m_replyWrapper)
+    if (bytesAvailable > 0)
         m_queue.requeue(&QNetworkReplyHandler::forwardData);
 }
 

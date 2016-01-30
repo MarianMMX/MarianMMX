@@ -43,19 +43,14 @@ private:
     HTMLAudioElement(const QualifiedName&, Document*, bool);
 };
 
-inline bool isHTMLAudioElement(HTMLElement* element)
+inline bool isHTMLAudioElement(Node* node)
 {
-    return !element->isHTMLUnknownElement() && element->hasTagName(HTMLNames::audioTag);
+    return node->hasTagName(HTMLNames::audioTag);
 }
 
 inline bool isHTMLAudioElement(Element* element)
 {
-    return element->isHTMLElement() && isHTMLAudioElement(toHTMLElement(element));
-}
-
-inline bool isHTMLAudioElement(Node* node)
-{
-    return node->isHTMLElement() && isHTMLAudioElement(toHTMLElement(node));
+    return element->hasTagName(HTMLNames::audioTag);
 }
 
 inline HTMLAudioElement* toHTMLAudioElement(Node* node)

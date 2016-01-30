@@ -54,15 +54,6 @@ inline bool isARMv7s()
 #endif
 }
 
-inline bool isMIPS()
-{
-#if CPU(MIPS)
-    return true;
-#else
-    return false;
-#endif
-}
-
 inline bool isX86()
 {
 #if CPU(X86_64) || CPU(X86)

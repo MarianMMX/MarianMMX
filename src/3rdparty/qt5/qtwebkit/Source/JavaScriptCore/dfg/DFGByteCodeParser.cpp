@@ -3031,15 +3031,13 @@ bool ByteCodeParser::parseBlock(unsigned limit)
             LAST_OPCODE(op_end);
 
         case op_throw:
-            addToGraph(Throw, get(currentInstruction[1].u.operand));
             flushAllArgumentsAndCapturedVariablesInInlineStack();
-            addToGraph(Unreachable);
+            addToGraph(Throw, get(currentInstruction[1].u.operand));
             LAST_OPCODE(op_throw);
             
         case op_throw_static_error:
-            addToGraph(ThrowReferenceError);
             flushAllArgumentsAndCapturedVariablesInInlineStack();
-            addToGraph(Unreachable);
+            addToGraph(ThrowReferenceError);
             LAST_OPCODE(op_throw_static_error);
             
         case op_call:
