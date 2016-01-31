@@ -19,7 +19,13 @@ fi
 cd qtbase
 
 $BUILD_SCRIPTS_DIR/config_qt.sh
+if [ "$1" == "full" ]; then
 make
 make install
+cd ..
+rm -rf qtbase
+else
+  echo "call $0 full for make && make install"
+fi
 
 cd $O_DIR

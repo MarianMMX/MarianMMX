@@ -10,6 +10,7 @@ if [ -z "$QT_SRC_BASE_DIR" ]; then
 fi
 #-no-sse2 -no-sse3 -no-sse4.1 -no-sse4.2 -no-avx -no-avx2 \
 $QT_SRC_BASE_DIR/qtbase/configure \
+-prefix $QTBASE_INSTALL_DIR \
 -nomake examples -nomake tests -opensource -confirm-license \
 -qt-sql-sqlite \
 -static -release \
@@ -20,4 +21,8 @@ $QT_SRC_BASE_DIR/qtbase/configure \
 -no-openvg -no-egl -no-eglfs -no-sql-sqlite2 -no-xcb -no-xcb-xlib \
 -no-linuxfb -no-directfb -no-evdev -no-kms -no-sm -no-dbus -no-alsa \
 -no-feature-accessibility \
+-I $TRD_ICU_DEST_DIR/include \
+-I $TRD_OPENSSL_DEST_DIR/include \
+-L $TRD_ICU_DEST_DIR/lib \
+-L $TRD_OPENSSL_DEST_DIR/lib \
 -v

@@ -3,6 +3,7 @@
 
 NUME_SYSTEM="$(uname -s)_$(uname -r)_$(uname -m)_gcc$(gcc -dumpversion)"
 export NUME_SYSTEM
+#echo $NUME_SYSTEM;exit;
 
 BUILD_SCRIPTS_DIR=$(dirname $(readlink -f $0))
 export BUILD_SCRIPTS_DIR
@@ -12,6 +13,9 @@ export TRD_SRC_DIR
 
 BUILD_DIR=$(dirname $(readlink -f $0))/../../../build
 export BUILD_DIR
+
+QTBASE_INSTALL_DIR=$BUILD_DIR/qtbase_install
+export QTBASE_INSTALL_DIR
 
 QT_SRC_BASE_DIR=$(dirname $(readlink -f $0))/../3rdparty/qt5
 export QT_SRC_BASE_DIR
