@@ -1,3 +1,6 @@
 [submodule "src/3rdparty/qt5/qtwebkit"]
 	path = src/3rdparty/qt5/qtwebkit
 	url = https://github.com/MarianMMX/qtwebkit.git
+[submodule "src/3rdparty/qt5/qt-creator"]
+	path = src/3rdparty/qt5/qt-creator
+	url = https://github.com/MarianMMX/qt-creator.git
