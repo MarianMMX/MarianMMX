@@ -1,61 +1,64 @@
 #!/bin/sh
-
-QT_SRC_VER=5.5.1
+# 2016-01-31 13:00 MarianMMX
 
 if [ -z "$1" ]; then
-  echo "Eroare argument"
+  echo "Eroare nume modul"
+  echo "./cale/numescript.sh NumeModul [NumeProFile]"
   exit
 fi
-  
+
+. $(dirname $0)/env_qt.sh
+
 MODUL=$1
 
-MOD_DIR=qt"$MODUL"-opensource-src-"$QT_SRC_VER"
-URL=http://download.qt.io/official_releases/qt/5.5/"$QT_SRC_VER"/submodules/qt"$MODUL"-opensource-src-"$QT_SRC_VER".tar.gz
+QMAKE_EXE="$BUILD_DIR"/qtbase/bin/qmake
 
-echo $URL
-#exit
+if [ ! -f "$QMAKE_EXE" ]; then
+  echo "$QMAKE_EXE nu exista"
+  exit
+fi
 
-#wget $URL
-tar -xzf "$MOD_DIR".tar.gz
-mkdir $MODUL
-exit
+MOD_DIR="$QT_SRC_BASE_DIR"/"$MODUL"
+if [ ! -d "$MOD_DIR" ]; then
+  echo "Modulul $MOD_DIR nu exista" 
+  exit
+fi
 
-OPEN_SSL="openssl"
-T_DIR="$(pwd)"/"$OPEN_SSL"_out
-RNAME="$OPEN_SSL"_"$(uname -s)_$(uname -r)_$(uname -m)_gcc$(gcc -dumpversion)"
-NUME_ARHIVA=$RNAME.tar.gz
-T_DIR=$T_DIR/$RNAME
-echo $T_DIR/$NUME_ARHIVA
-echo $URL
-exit
+if [ -z "$2" ]; then
+  MODUL_PRO="$MOD_DIR"/"$MODUL".pro
+else
+  MODUL_PRO="$MOD_DIR"/"$2"
+fi
+#echo $MODUL_PRO;echo $2;exit
 
-echo Downloadam arhiva:
-wget --no-check-certificate $URL -O $OPEN_SSL.tar.gz
-mkdir $OPEN_SSL && cd $OPEN_SSL
-echo Extragem arhiva: 
-tar -xzf ../$OPEN_SSL.tar.gz
-rm -rf ../$OPEN_SSL.tar.gz
-cd $OPEN_SSL*
+if [ ! -f "$MODUL_PRO" ]; then
+  echo "Fisierul proiect $MODUL_PRO nu exista"
+  exit
+fi
 
-#calea completa, altfel apar probleme
-echo Configuram in $T_DIR
-./config --prefix=$T_DIR
-echo MAKE
+O_DIR=$(pwd)
+
+MOD_BUILD="$BUILD_DIR"/"$MODUL"
+
+if [ "$3" == "continue" ]; then
+  cd "$BUILD_DIR"/"$MODUL"
+else
+
+if [ -d "$MOD_BUILD" ]; then
+  echo "Directorul $MOD_BUILD exista, stergeti acest director, sau adauga al 3lea arg continue"
+  exit
+fi
+
+cd "$BUILD_DIR"
+if [ ! -d "$MODUL" ]; then
+	mkdir "$MODUL"
+fi
+cd "$MODUL"
+
+$QMAKE_EXE $MODUL_PRO
+fi
 make
-echo INSTALL
-make install
+#make install
 
-cd ../..
-echo STERGEM FOLDERUL DE LUCRU
-rm -rf $OPEN_SSL
-
-echo CREAM ARHIVA
-cd "$OPEN_SSL"_out
-tar -czf $NUME_ARHIVA $RNAME
-mv $NUME_ARHIVA ..
-cd ..
-
-echo STERGEM "$OPEN_SSL"_out 
-rm -rf "$OPEN_SSL"_out
- 
+cd $O_DIR
 

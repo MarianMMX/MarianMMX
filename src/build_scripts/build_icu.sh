@@ -30,7 +30,12 @@ fi
 mkdir tmp_icu && cd tmp_icu
 chmod +x "$TRD_ICU_SRC_DIR"/source/runConfigureICU
 chmod +x "$TRD_ICU_SRC_DIR"/source/configure
+
+#only for qt-creator
+#../build/icu/lib/libicui18n.a(ucal.ao): relocation R_X86_64_32S against `_ZTVN6icu_5613UnicodeStringE' can not be used when making a shared object; recompile with -fPIC
+#/home/marian/MarianDev4G/MarianMMX/src/build_scripts/../../../build/icu/lib/libicui18n.a: error adding symbols: Bad value
 sh "$TRD_ICU_SRC_DIR"/source/runConfigureICU "$1" --prefix=$T_DIR --enable-static --disable-shared
+#sh "$TRD_ICU_SRC_DIR"/source/runConfigureICU "$1" --prefix=$T_DIR --enable-static
 make
 make install
 

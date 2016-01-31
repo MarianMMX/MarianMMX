@@ -1,0 +1,8 @@
+./MarianMMX/src/build_scripts/build_icu.sh
+./MarianMMX/src/build_scripts/build_openssl.sh
+./MarianMMX/src/build_scripts/build_qt.sh
+
+git submodule init src/3rdparty/qt5/qt-creator
+git submodule update src/3rdparty/qt5/qt-creator
+./MarianMMX/src/build_scripts/build_qt_module.sh qt-creator qtcreator.pro
+#Project ERROR: Unknown module(s) in QT: qml
