@@ -20,5 +20,6 @@ cd qtbase
 
 $BUILD_SCRIPTS_DIR/config_qt.sh
 make
+make install
 
 cd $O_DIR
