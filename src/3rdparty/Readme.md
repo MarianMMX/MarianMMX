@@ -23,3 +23,11 @@ pkg install bison
 pkg install ruby  
   
 pkg install git  
+
+Lubuntu
+sudo apt-get install git
+sudo apt-get install gcc
+sudo apt-get install g++
+sudo apt-get install cmake
+sudo apt-get install wine
+sudo apt-get install libgl-dev
