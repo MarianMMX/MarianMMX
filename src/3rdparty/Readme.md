@@ -34,3 +34,15 @@ sudo apt-get install wine
 sudo apt-get install libgl-dev  
 ```  
 
+..\ruby_scr\configure.bat  
+--with-static-linked-ext ^  
+--disable-debug-env ^  
+--disable-install-doc ^  
+--prefix %DEST_DIR% ^  
+--without-ext="win32ole,fiddle"  
+  
+--with-static-linked-ext \  
+--disable-debug-env \  
+--disable-install-doc \  
+--prefix $(pwd)/out \  
+--without-ext="win32ole,fiddle"  
