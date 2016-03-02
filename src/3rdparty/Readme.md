@@ -41,8 +41,10 @@ sudo apt-get install libgl-dev
 --prefix %DEST_DIR% ^  
 --without-ext="win32ole,fiddle"  
   
+#pkm install openssl-dev  
+../src/configure \  
 --with-static-linked-ext \  
 --disable-debug-env \  
 --disable-install-doc \  
---prefix $(pwd)/out \  
---without-ext="win32ole,fiddle"  
+--prefix $(pwd)/out  
+  
