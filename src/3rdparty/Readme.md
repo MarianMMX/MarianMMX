@@ -51,3 +51,6 @@ mkdir build && cd build
 --prefix $(pwd)/out  
 ```
   
+yum install httpd mod_ssl  
+yum install php php-devel php-mysql php-gd php-xml  
+  
