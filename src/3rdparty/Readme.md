@@ -50,6 +50,7 @@ mkdir build && cd build
 --with-static-linked-ext \  
 --disable-debug-env \  
 --disable-install-doc \  
+--without-X11 \  
 --prefix $(pwd)/out  
 ```
   
