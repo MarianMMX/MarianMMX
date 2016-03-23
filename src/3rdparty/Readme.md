@@ -57,3 +57,4 @@ mkdir build && cd build
 yum install httpd mod_ssl  
 yum install php php-devel php-mysql php-gd php-xml  
   
+sudo a2enmod vhost_alias  
