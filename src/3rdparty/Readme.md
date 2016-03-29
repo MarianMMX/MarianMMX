@@ -24,6 +24,10 @@ pkg install ruby
   
 pkg install git  
   
+pkg install xorg  
+pkg install lxde-meta  
+
+  
 Lubuntu  
 ```  
 sudo apt-get install git  
